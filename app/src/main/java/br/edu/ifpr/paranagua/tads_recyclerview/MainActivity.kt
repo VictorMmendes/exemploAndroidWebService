@@ -7,6 +7,11 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,38 +19,47 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val todasTarefasdoMundo =
-                listOf<Tarefa>(
-                        Tarefa("Lavar o gato", "Com sabão de soda!"),
-                        Tarefa("Catar folhas", "Jardim"),
-                        Tarefa("Fazer trabalho de DM", "Sério!"),
-                        Tarefa("Lavar o gato", "a\nb\ng\nf\nr\nt\nj\n\nCo\nm \nsa\n\n\nb\não de soda!"),
-                        Tarefa("Catar folhas", "Jardim"),
-                        Tarefa("Fazer trabalho de DM", "Sério!"),
-                        Tarefa("Lavar o gato", "Com \nsabão de \nsoda!"),
-                        Tarefa("Catar folhas", "Jardim"),
-                        Tarefa("Fazer trabalho de DM", "Sério!"),
-                        Tarefa("Lavar o gato", "Com sabão de soda!"),
-                        Tarefa("Catar folhas", "Jar\nd\nim"),
-                        Tarefa("Fazer trabalho de DM", "Sério!"),
-                        Tarefa("Lavar o gato", "Com sabão de soda!"),
-                        Tarefa("Catar folhas", "Jar\ndim"),
-                        Tarefa("Fazer trabalho de DM", "Sério!"),
-                        Tarefa("Não sei mais o que", "")
-                )
-
-        val adapter = TarefasAdapter(todasTarefasdoMundo)
-        listTarefas.adapter = adapter
-
-//        val layout = LinearLayoutManager(this,
-//                LinearLayoutManager.VERTICAL, false)
+        val layout = LinearLayoutManager(this,
+                LinearLayoutManager.VERTICAL, false)
 
 //        val layout = GridLayoutManager(this, 2)
 //        layout.orientation = GridLayoutManager.VERTICAL
 
-        val layout = StaggeredGridLayoutManager(2,
-                StaggeredGridLayoutManager.VERTICAL)
+//        val layout = StaggeredGridLayoutManager(2,
+//                StaggeredGridLayoutManager.VERTICAL)
 
         listTarefas.layoutManager = layout
+
+        carregarTarefas()
+
+        btRegarregar.setOnClickListener({ carregarTarefas() })
+    }
+
+    fun carregarTarefas() {
+        var retrofit = Retrofit.Builder()
+                .baseUrl("http://10.20.23.109/tarefas/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+
+        var service =
+            retrofit.create(BuscaTodasTarefasService::class.java)
+
+        var call = service.buscaTodas()
+
+        call.enqueue(object: Callback<List<Tarefa>> {
+            override fun onFailure(call: Call<List<Tarefa>>?,
+                                   t: Throwable?) {
+
+            }
+
+            override fun onResponse(call: Call<List<Tarefa>>?,
+                           response: Response<List<Tarefa>>?) {
+                var tarefas:List<Tarefa> = response?.body()!!
+
+                val adapter = TarefasAdapter(tarefas)
+                listTarefas.adapter = adapter
+            }
+
+        })
     }
 }
