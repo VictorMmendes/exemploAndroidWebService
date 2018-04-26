@@ -1,9 +1,11 @@
-package br.edu.ifpr.paranagua.tads_recyclerview
+package br.edu.ifpr.paranagua.tads_recyclerview.ui
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import br.edu.ifpr.paranagua.tads_recyclerview.R
+import br.edu.ifpr.paranagua.tads_recyclerview.entidades.Tarefa
 import kotlinx.android.synthetic.main.tarefa_item.view.*
 
 class TarefasAdapter(val tarefas: List<Tarefa>) :

@@ -1,5 +1,6 @@
-package br.edu.ifpr.paranagua.tads_recyclerview
+package br.edu.ifpr.paranagua.tads_recyclerview.remoto.servicos
 
+import br.edu.ifpr.paranagua.tads_recyclerview.entidades.Tarefa
 import retrofit2.Call
 import retrofit2.http.GET
 
