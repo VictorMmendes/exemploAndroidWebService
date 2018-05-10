@@ -24,7 +24,7 @@ class TarefaDaoRemoto(val listener: TarefaRemotaListener) {
     }
 
     private var retrofit = Retrofit.Builder()
-            .baseUrl("http://10.0.2.2/tarefas/")
+            .baseUrl("http://10.20.23.189/tarefas/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
